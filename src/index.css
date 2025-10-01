@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* Styles personnalisés pour le dashboard */
+@layer components {
+  .metric-trend-positive {
+    @apply text-green-600 bg-green-50 border-green-200;
+  }
+  
+  .metric-trend-negative {
+    @apply text-red-600 bg-red-50 border-red-200;
+  }
+  
+  .metric-trend-neutral {
+    @apply text-gray-600 bg-gray-50 border-gray-200;
+  }
+
+  .glass-effect {
+   @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3);
+  }
+}
