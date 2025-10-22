@@ -1,1 +1,74 @@
 @import "tailwindcss";
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    @apply h-full;
+  }
+  
+  body {
+    @apply h-full m-0 p-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200;
+    background-color: white;
+  }
+  
+  body.dark {
+    background-color: #111827 !important; 
+    color: #f9fafb !important; 
+  }
+
+  #root {
+    @apply h-full;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900 dark:text-white;
+  }
+  
+  p, span, div, li, td, th, label {
+    @apply text-gray-700 dark:text-gray-300;
+  }
+
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+.dark {
+  background-color: #111827 !important;
+}
+
+.dark * {
+  background-color: inherit;
+}
+
+.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #4b5563 !important;
+}
