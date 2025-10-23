@@ -12128,20 +12128,27 @@ const useTheme = () => {
   return context;
 };
 const ThemeContext = reactExports.createContext(void 0);
+const AuthContext = reactExports.createContext(void 0);
 const MOCK_USERS = [
   {
     id: "1",
+    name: "Administrator",
     email: "admin@example.com",
     password: "password",
-    name: "Administrator",
-    role: "admin"
+    role: "admin",
+    createdAt: /* @__PURE__ */ new Date("2024-01-01"),
+    lastLogin: /* @__PURE__ */ new Date(),
+    provider: "email"
   },
   {
     id: "2",
+    name: "Demo User",
     email: "user@example.com",
     password: "password",
-    name: "Demo user",
-    role: "user"
+    role: "user",
+    createdAt: /* @__PURE__ */ new Date("2024-01-01"),
+    lastLogin: /* @__PURE__ */ new Date(),
+    provider: "email"
   }
 ];
 const AuthProvider = ({ children }) => {
@@ -12184,9 +12191,12 @@ const AuthProvider = ({ children }) => {
           const { password: _, ...userWithoutPassword } = user;
           const token = "mock-jwt-token-" + Date.now();
           localStorage.setItem("auth_token", token);
-          localStorage.setItem("user_data", JSON.stringify(userWithoutPassword));
+          localStorage.setItem("user_data", JSON.stringify({
+            ...userWithoutPassword,
+            lastLogin: /* @__PURE__ */ new Date()
+          }));
           setAuthState({
-            user: userWithoutPassword,
+            user: { ...userWithoutPassword, lastLogin: /* @__PURE__ */ new Date() },
             isAuthenticated: true,
             isLoading: false
           });
@@ -12217,7 +12227,10 @@ const AuthProvider = ({ children }) => {
           id: Date.now().toString(),
           email: data.email,
           name: data.name,
-          role: "user"
+          role: "user",
+          createdAt: /* @__PURE__ */ new Date(),
+          lastLogin: /* @__PURE__ */ new Date(),
+          provider: "email"
         };
         const token = "mock-jwt-token-" + Date.now();
         localStorage.setItem("auth_token", token);
@@ -12228,6 +12241,66 @@ const AuthProvider = ({ children }) => {
           isLoading: false
         });
         resolve();
+      }, 1500);
+    });
+  };
+  const loginWithGoogle = async () => {
+    setAuthState((prev) => ({ ...prev, isLoading: true }));
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const googleUser = {
+            id: "google_" + Date.now(),
+            name: "Google User",
+            email: `google${Date.now()}@example.com`,
+            role: "user",
+            createdAt: /* @__PURE__ */ new Date(),
+            lastLogin: /* @__PURE__ */ new Date(),
+            provider: "google"
+          };
+          const token = "mock-google-token-" + Date.now();
+          localStorage.setItem("auth_token", token);
+          localStorage.setItem("user_data", JSON.stringify(googleUser));
+          setAuthState({
+            user: googleUser,
+            isAuthenticated: true,
+            isLoading: false
+          });
+          resolve();
+        } catch {
+          setAuthState((prev) => ({ ...prev, isLoading: false }));
+          reject(new Error("Erreur de connexion Google"));
+        }
+      }, 1500);
+    });
+  };
+  const loginWithFacebook = async () => {
+    setAuthState((prev) => ({ ...prev, isLoading: true }));
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const facebookUser = {
+            id: "facebook_" + Date.now(),
+            name: "Facebook User",
+            email: `facebook${Date.now()}@example.com`,
+            role: "user",
+            createdAt: /* @__PURE__ */ new Date(),
+            lastLogin: /* @__PURE__ */ new Date(),
+            provider: "facebook"
+          };
+          const token = "mock-facebook-token-" + Date.now();
+          localStorage.setItem("auth_token", token);
+          localStorage.setItem("user_data", JSON.stringify(facebookUser));
+          setAuthState({
+            user: facebookUser,
+            isAuthenticated: true,
+            isLoading: false
+          });
+          resolve();
+        } catch {
+          setAuthState((prev) => ({ ...prev, isLoading: false }));
+          reject(new Error("Erreur de connexion Facebook"));
+        }
       }, 1500);
     });
   };
@@ -12257,7 +12330,9 @@ const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    updateProfile
+    updateProfile,
+    loginWithGoogle,
+    loginWithFacebook
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AuthContext.Provider, { value, children });
 };
@@ -12268,7 +12343,6 @@ const useAuth = () => {
   }
   return context;
 };
-const AuthContext = reactExports.createContext(void 0);
 const NotificationProvider = ({ children }) => {
   const [state, setState] = reactExports.useState({
     notifications: [],
@@ -12447,7 +12521,7 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$q = [
+const __iconNode$t = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -12457,23 +12531,57 @@ const __iconNode$q = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$q);
+const Bell = createLucideIcon("bell", __iconNode$t);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$p = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$p);
+const __iconNode$s = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$s);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$o);
+const __iconNode$r = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$r);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$q);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+];
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$p);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const Clock = createLucideIcon("clock", __iconNode$o);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12481,11 +12589,10 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$o);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$n = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+  ["line", { x1: "12", x2: "12", y1: "2", y2: "22", key: "7eqyqh" }],
+  ["path", { d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6", key: "1b0p4s" }]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$n);
+const DollarSign = createLucideIcon("dollar-sign", __iconNode$n);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12493,10 +12600,11 @@ const CircleAlert = createLucideIcon("circle-alert", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
 ];
-const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$m);
+const Download = createLucideIcon("download", __iconNode$m);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12504,40 +12612,6 @@ const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Clock = createLucideIcon("clock", __iconNode$l);
-/**
- * @license lucide-react v0.544.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
-  ["line", { x1: "12", x2: "12", y1: "2", y2: "22", key: "7eqyqh" }],
-  ["path", { d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6", key: "1b0p4s" }]
-];
-const DollarSign = createLucideIcon("dollar-sign", __iconNode$k);
-/**
- * @license lucide-react v0.544.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
-];
-const Download = createLucideIcon("download", __iconNode$j);
-/**
- * @license lucide-react v0.544.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$i = [
   [
     "path",
     {
@@ -12555,14 +12629,14 @@ const __iconNode$i = [
   ],
   ["path", { d: "m2 2 20 20", key: "1ooewy" }]
 ];
-const EyeOff = createLucideIcon("eye-off", __iconNode$i);
+const EyeOff = createLucideIcon("eye-off", __iconNode$l);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [
+const __iconNode$k = [
   [
     "path",
     {
@@ -12572,14 +12646,27 @@ const __iconNode$h = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Eye = createLucideIcon("eye", __iconNode$h);
+const Eye = createLucideIcon("eye", __iconNode$k);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [
+const __iconNode$j = [
+  [
+    "path",
+    { d: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z", key: "1jg4f8" }
+  ]
+];
+const Facebook = createLucideIcon("facebook", __iconNode$j);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [
   [
     "path",
     {
@@ -12588,7 +12675,30 @@ const __iconNode$g = [
     }
   ]
 ];
-const Funnel = createLucideIcon("funnel", __iconNode$g);
+const Funnel = createLucideIcon("funnel", __iconNode$i);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+];
+const Info = createLucideIcon("info", __iconNode$h);
+/**
+ * @license lucide-react v0.544.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$g);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12596,11 +12706,11 @@ const Funnel = createLucideIcon("funnel", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 16v-4", key: "1dtifu" }],
-  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+  ["path", { d: "m10 17 5-5-5-5", key: "1bsop3" }],
+  ["path", { d: "M15 12H3", key: "6jk70r" }],
+  ["path", { d: "M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4", key: "u53s6r" }]
 ];
-const Info = createLucideIcon("info", __iconNode$f);
+const LogIn = createLucideIcon("log-in", __iconNode$f);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12608,11 +12718,11 @@ const Info = createLucideIcon("info", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["path", { d: "m10 17 5-5-5-5", key: "1bsop3" }],
-  ["path", { d: "M15 12H3", key: "6jk70r" }],
-  ["path", { d: "M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4", key: "u53s6r" }]
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogIn = createLucideIcon("log-in", __iconNode$e);
+const LogOut = createLucideIcon("log-out", __iconNode$e);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12620,11 +12730,10 @@ const LogIn = createLucideIcon("log-in", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$d);
+const Mail = createLucideIcon("mail", __iconNode$d);
 /**
  * @license lucide-react v0.544.0 - ISC
  *
@@ -12809,7 +12918,7 @@ const LoginPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = reactExports.useState(false);
   const [error, setError] = reactExports.useState("");
   const [isLoading, setIsLoading] = reactExports.useState(false);
-  const { login, register } = useAuth();
+  const { login, register, loginWithGoogle, loginWithFacebook } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -12834,6 +12943,21 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+  const handleSocialLogin = async (provider) => {
+    setError("");
+    setIsLoading(true);
+    try {
+      if (provider === "google") {
+        await loginWithGoogle();
+      } else {
+        await loginWithFacebook();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : `Erreur de connexion ${provider}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleDemoLogin = (role) => {
     const demoCredentials = {
       admin: { email: "admin@example.com", password: "password" },
@@ -12853,6 +12977,42 @@ const LoginPage = () => {
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-2xl font-bold text-white", children: "📊" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-gray-900 dark:text-white", children: "E-commerce Analytics" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 dark:text-gray-400 mt-2", children: mode === "login" ? "Connectez-vous à votre compte" : "Créez votre compte" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 mb-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => handleSocialLogin("google"),
+            disabled: isLoading,
+            className: "w-full flex items-center justify-center space-x-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "w-5 h-5", viewBox: "0 0 24 24", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#4285F4", d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#34A853", d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#FBBC05", d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#EA4335", d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Continuer avec Google" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            onClick: () => handleSocialLogin("facebook"),
+            disabled: isLoading,
+            className: "w-full flex items-center justify-center space-x-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Facebook, { className: "w-5 h-5 text-blue-600" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Continuer avec Facebook" })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center mb-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-300 dark:border-gray-600" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-3 text-sm text-gray-500 dark:text-gray-400", children: "ou" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-300 dark:border-gray-600" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [
         error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg", children: [
@@ -12989,7 +13149,7 @@ const LoginPage = () => {
         }
       ) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-gray-500 dark:text-gray-400", children: "© 2024 E-commerce Analytics. Tous droits réservés." }) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-gray-500 dark:text-gray-400", children: "© 2025 E-commerce Analytics. Tous droits réservés." }) })
   ] }) });
 };
 const DashboardLayout = ({ children }) => {
@@ -36179,60 +36339,101 @@ const AdvancedFilters = ({ isOpen, onClose, onApplyFilters, currentFilters }) =>
 const LoginForm = ({ onSwitchToRegister, onClose }) => {
   const [credentials, setCredentials] = reactExports.useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = reactExports.useState(false);
-  const [error, setError] = reactExports.useState("");
-  const { login, isLoading } = useAuth();
+  const { login, loginWithGoogle, loginWithFacebook, isLoading } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
       await login(credentials);
       onClose();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } catch (error) {
+      console.error("Erreur de connexion:", error);
+      alert(error instanceof Error ? error.message : "Erreur de connexion");
     }
   };
-  const handleDemoLogin = (role) => {
-    const demoCredentials = {
-      admin: { email: "admin@example.com", password: "password" },
-      user: { email: "user@example.com", password: "password" }
-    };
-    setCredentials(demoCredentials[role]);
+  const handleSocialLogin = async (provider) => {
+    try {
+      if (provider === "google") {
+        await loginWithGoogle();
+      } else {
+        await loginWithFacebook();
+      }
+      onClose();
+    } catch (error) {
+      console.error("Erreur de connexion sociale:", error);
+      alert(error instanceof Error ? error.message : "Erreur de connexion sociale");
+    }
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold text-gray-900 dark:text-white", children: "Connexion" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 dark:text-gray-400 mt-2", children: "Accédez à votre tableau de bord" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 dark:text-gray-400 mt-2", children: "Connectez-vous à votre compte" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [
-      error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { className: "w-5 h-5 text-red-600 dark:text-red-400" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-600 dark:text-red-400 text-sm", children: error })
-      ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => handleSocialLogin("google"),
+          disabled: isLoading,
+          className: "w-full flex items-center justify-center space-x-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "w-5 h-5", viewBox: "0 0 24 24", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#4285F4", d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#34A853", d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#FBBC05", d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fill: "#EA4335", d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Continuer avec Google" })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => handleSocialLogin("facebook"),
+          disabled: isLoading,
+          className: "w-full flex items-center justify-center space-x-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Facebook, { className: "w-5 h-5 text-blue-600" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Continuer avec Facebook" })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-300 dark:border-gray-600" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-3 text-sm text-gray-500 dark:text-gray-400", children: "ou" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 border-t border-gray-300 dark:border-gray-600" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Email" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            type: "email",
-            required: true,
-            value: credentials.email,
-            onChange: (e) => setCredentials((prev) => ({ ...prev, email: e.target.value })),
-            className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800",
-            placeholder: "votre@email.com"
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Mot de passe" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "Email" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "email",
+              value: credentials.email,
+              onChange: (e) => setCredentials((prev) => ({ ...prev, email: e.target.value })),
+              required: true,
+              className: "w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm",
+              placeholder: "votre@email.com"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "Mot de passe" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "input",
             {
               type: showPassword ? "text" : "password",
-              required: true,
               value: credentials.password,
               onChange: (e) => setCredentials((prev) => ({ ...prev, password: e.target.value })),
-              className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 pr-10",
+              required: true,
+              className: "w-full pl-10 pr-12 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm",
               placeholder: "Votre mot de passe"
             }
           ),
@@ -36241,52 +36442,28 @@ const LoginForm = ({ onSwitchToRegister, onClose }) => {
             {
               type: "button",
               onClick: () => setShowPassword(!showPassword),
-              className: "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300",
-              children: showPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-5 h-5" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-5 h-5" })
+              className: "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600",
+              children: showPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-4 h-4" })
             }
           )
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
           type: "submit",
           disabled: isLoading,
-          className: "w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2",
-          children: [
-            isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(LogIn, { className: "w-5 h-5" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: isLoading ? "Connexion..." : "Se connecter" })
-          ]
+          className: "w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+          children: isLoading ? "Connexion..." : "Se connecter"
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 space-y-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-center text-sm text-gray-600 dark:text-gray-400", children: "Ou connectez-vous avec un compte de démo :" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: () => handleDemoLogin("admin"),
-            className: "px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm",
-            children: "Admin Demo"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: () => handleDemoLogin("user"),
-            className: "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm",
-            children: "User Demo"
-          }
-        )
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
       {
         onClick: onSwitchToRegister,
-        className: "text-blue-600 dark:text-white hover:text-blue-800 dark:hover:text-white text-sm",
-        children: "Pas de compte ? S'inscrire"
+        className: "text-blue-600 hover:text-blue-700 text-sm",
+        children: "Pas de compte ? Créer un compte"
       }
     ) })
   ] });
@@ -38907,4 +39084,4 @@ function useViewTransitionState(to2, { relative } = {}) {
 ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(React.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ThemeProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(AuthProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(NotificationProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(HashRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) }) }) }) })
 );
-//# sourceMappingURL=index-DhW7sMtZ.js.map
+//# sourceMappingURL=index-DWPkEJIt.js.map
