@@ -3,16 +3,20 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss()
+  plugins: [react()
+    , tailwindcss()
   ],
-  server: {
-    port: 3000,
-    open: true
-  },
+
+  base: '/ecommerce-analytics-dashboard/',
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    // Optionnel : pour debug
+    minify: false,
     sourcemap: true
+  },
+  server: {
+    port: 3000
   }
 })

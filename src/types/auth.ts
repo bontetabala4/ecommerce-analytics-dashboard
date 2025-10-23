@@ -4,6 +4,9 @@ export interface User {
   email: string;
   role: string;
   avatar?: string;
+  createdAt?: Date;
+  lastLogin?: Date;
+  provider?: 'email' | 'google' | 'facebook'; // Nouveau champ
 }
 
 export interface AuthState {
@@ -33,5 +36,8 @@ export interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
   register: (data: RegisterData) => Promise<void>;
-  updateProfile: (user: Partial<User>) => Promise<void>;    
+  updateProfile: (user: Partial<User>) => Promise<void>;
+  // Ajoutez ces méthodes pour l'authentification sociale
+  loginWithGoogle: () => Promise<void>;
+  loginWithFacebook: () => Promise<void>;
 }

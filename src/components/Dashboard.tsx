@@ -10,7 +10,7 @@ import AdvancedFilters from './filters/AdvancedFilters';
 import { AuthModal } from './auth/AuthModal';
 import { NotificationPanel } from './notifications/NotificationPanel';
 import { NotificationToast } from './notifications/NotificationToast';
-import { useAuth } from '../contexts/AuthContext';
+import  { useAuth } from '../hooks/useAuth';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useMetrics } from '../hooks/useMetrics';
 import { calculateAggregates } from '../utils/calculations';

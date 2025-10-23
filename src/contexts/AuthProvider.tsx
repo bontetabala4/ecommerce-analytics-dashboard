@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { AuthContext } from './AuthContext';
 import type { AuthContextType, LoginCredentials, RegisterData, User } from '../types/auth';
-
+import { MOCK_USERS } from '../constants/mockUsers';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [authState, setAuthState] = useState<{
@@ -49,8 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         );
 
         if (user) { 
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { password: _, ...userWithoutPassword } = user; 
+           // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { password: _, ...userWithoutPassword } = user;
           const token = 'mock-jwt-token-' + Date.now();
           
           localStorage.setItem('auth_token', token);

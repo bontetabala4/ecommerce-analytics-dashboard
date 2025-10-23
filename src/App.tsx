@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthProvider';
+import { useAuth } from './hooks/useAuth';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './components/Dashboard';
@@ -35,4 +36,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
