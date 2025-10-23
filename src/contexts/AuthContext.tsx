@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { AuthContextType, LoginCredentials, RegisterData, User } from '../types/auth';
+import { AuthContext } from './AuthContext';
+import { MOCK_USERS } from '../constants/mockUsers';
 
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

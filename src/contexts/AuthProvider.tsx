@@ -92,7 +92,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return;
         }
 
-        // Créer un nouvel utilisateur
         const newUser: User = {
           id: Date.now().toString(),
           email: data.email,
@@ -117,14 +116,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  // Méthode pour Google
   const loginWithGoogle = async () => {
     setAuthState(prev => ({ ...prev, isLoading: true }));
     
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         try {
-          // Simulation d'un utilisateur Google
+
           const googleUser: User = {
             id: 'google_' + Date.now(),
             name: 'Google User',
@@ -153,14 +151,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  // Méthode pour Facebook
   const loginWithFacebook = async () => {
     setAuthState(prev => ({ ...prev, isLoading: true }));
     
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         try {
-          // Simulation d'un utilisateur Facebook
+
           const facebookUser: User = {
             id: 'facebook_' + Date.now(),
             name: 'Facebook User',

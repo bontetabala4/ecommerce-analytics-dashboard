@@ -93,7 +93,6 @@ export const LoginPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Boutons de connexion sociale */}
           <div className="space-y-3 mb-6">
             <button
               onClick={() => handleSocialLogin('google')}
@@ -119,7 +118,6 @@ export const LoginPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Séparateur */}
           <div className="flex items-center mb-6">
             <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
             <span className="px-3 text-sm text-gray-500 dark:text-gray-400">ou</span>
